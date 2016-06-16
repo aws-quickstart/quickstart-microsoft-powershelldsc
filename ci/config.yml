@@ -17,9 +17,9 @@ global:
   cis3bucket:  s3://quickstart-ci-bucket
  
 tests:
-  quickstart-microsoft-powershelldsct1:
+  template1:
     template_file: Template_1_DSC.template
     parameter_input: Template_1_DSC.json
-  quickstart-microsoft-powershelldsct2:
+  template2:
     template_file: Template_2_DSC.template
     parameter_input: Template_2_DSC.json
