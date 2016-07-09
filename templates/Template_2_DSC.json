@@ -9,7 +9,7 @@
     },
     {
         "ParameterKey": "AdminPassword",
-        "ParameterValue": "Password123"
+        "ParameterValue": "$[alfred_genpass_32]"
     },
     {
         "ParameterKey": "DMZ1CIDR",
