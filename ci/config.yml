@@ -1,8 +1,7 @@
 global:
-  qsname: quickstart-microsoft-powershelldsc
+  marketplace-ami: false 
   owner: quickstart-eng@amazon.com
-  marketplace-ami: false
-  reporting: true
+  qsname: quickstart-microsoft-powershelldsc
   regions:
     - ap-northeast-1
     - ap-northeast-2
@@ -15,12 +14,12 @@ global:
     - us-east-1
     - us-west-1
     - us-west-2
-  cis3bucket:  s3://quickstart-ci-bucket
- 
+  reporting: true
+
 tests:
   template1:
-    template_file: Template_1_DSC.template
-    parameter_input: Template_1_DSC.json
+      parameter_input: Template_1_DSC.json
+      template_file: Template_1_DSC.template
   template2:
-    template_file: Template_2_DSC.template
     parameter_input: Template_2_DSC.json
+    template_file: Template_2_DSC.template
