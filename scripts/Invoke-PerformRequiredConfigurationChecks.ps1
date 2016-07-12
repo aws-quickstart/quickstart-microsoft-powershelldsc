@@ -1,12 +1,8 @@
 ﻿[CmdletBinding()]
-param(
-    [string]$Instance,
-    [string]$Region
-    )
+param()
 
 try {
-    Write-Verbose "Calling PerformRequiredConfigurationChecks method with flag 1"
-    Invoke-CimMethod -Namespace root/Microsoft/Windows/DesiredStateConfiguration -ClassName MSFT_DSCLocalConfigurationManager -Method PerformRequiredConfigurationChecks -Arguments @{Flags = [System.UInt32]1} -ErrorAction Stop
+    Update-DscConfiguration -Wait -Verbose
 }
 catch {
     $_ | Write-AWSQuickStartException
