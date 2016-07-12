@@ -44,19 +44,11 @@
         "ParameterValue": "10.0.64.0/19"
     },
     {
-        "ParameterKey": "PullServer1PrivateIp",
-        "ParameterValue": "10.0.0.15"
-    },
-    {
-        "ParameterKey": "PullServer2PrivateIp",
-        "ParameterValue": "10.0.64.15"
-    },
-    {
         "ParameterKey": "VPCCIDR",
         "ParameterValue": "10.0.0.0/16"
     },
     {
         "ParameterKey": "WindowsInstanceType",
-        "ParameterValue": "m3.xlarge"
+        "ParameterValue": "t2.large"
     }
 ]

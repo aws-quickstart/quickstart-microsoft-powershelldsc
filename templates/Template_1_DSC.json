@@ -61,6 +61,6 @@
     },
     {
         "ParameterKey": "WindowsInstanceType",
-        "ParameterValue": "m3.xlarge"
+        "ParameterValue": "t2.large"
     }
 ]
