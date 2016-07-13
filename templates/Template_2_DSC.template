@@ -2348,7 +2348,7 @@
         },
         "DC2WaitCondition": {
             "Type": "AWS::CloudFormation::WaitCondition",
-            "DependsOn": "DC1",
+            "DependsOn": "DC2",
             "Properties": {
                 "Handle": {
                     "Ref": "DC2WaitHandle"
