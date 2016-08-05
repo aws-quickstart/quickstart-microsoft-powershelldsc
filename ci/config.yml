@@ -1,5 +1,5 @@
 global:
-  marketplace-ami: false 
+  marketplace-ami: false
   owner: quickstart-eng@amazon.com
   qsname: quickstart-microsoft-powershelldsc
   regions:
@@ -10,16 +10,15 @@ global:
     - ap-southeast-2
     - eu-central-1
     - eu-west-1
-    - sa-east-1
+    # - sa-east-1 Unsupported only in CI due to GetAZs on ref acct
     - us-east-1
     - us-west-1
     - us-west-2
   reporting: true
-
 tests:
   template1:
-      parameter_input: Template_1_DSC.json
-      template_file: Template_1_DSC.template
+    parameter_input: Template_1_DSC.json
+    template_file: Template_1_DSC.template
   template2:
     parameter_input: Template_2_DSC.json
     template_file: Template_2_DSC.template
