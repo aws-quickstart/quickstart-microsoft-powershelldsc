@@ -11,6 +11,8 @@ param(
 )
 
 try {
+    $ErrorActionPreference = "Stop"
+
     Write-Verbose "Creating c:\inetpub\wwwroot"
     New-Item -ItemType Directory -Path c:\inetpub\wwwroot -ErrorAction Stop
 

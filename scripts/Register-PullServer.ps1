@@ -8,6 +8,8 @@ param(
 )
 
 try {
+    $ErrorActionPreference = "Stop"
+
     Write-Verbose "Getting ELB Name"
     $ELBName = Get-ELBLoadBalancer -Region $Region | Where-Object {$_.VpcId -eq $VpcId} | select -ExpandProperty LoadBalancerName
 

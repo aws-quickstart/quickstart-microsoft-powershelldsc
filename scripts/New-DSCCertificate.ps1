@@ -8,6 +8,8 @@ param(
 )
 
 try {
+    $ErrorActionPreference = "Stop"
+
     Write-Verbose "Creating Certificate"
     $DomainDNSName = $Instance
 

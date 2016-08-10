@@ -2,6 +2,8 @@
 param()
 
 try {
+    $ErrorActionPreference = "Stop"
+
     Update-DscConfiguration -Wait -Verbose
 }
 catch {

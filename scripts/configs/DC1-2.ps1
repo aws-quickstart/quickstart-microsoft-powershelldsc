@@ -3,11 +3,18 @@
     [string]$AdminPassword
 )
 
-Remove-Item $env:systemRoot/system32/configuration/pending.mof -force
-Get-Process *wmi* | stop-process -force
-Restart-Service winrm -force
+try {
+    $ErrorActionPreference = "Stop"
 
-$Pass = ConvertTo-SecureString $AdminPassword -AsPlainText -Force
-$Credential = New-Object System.Management.Automation.PSCredential -ArgumentList "$DomainNetBiosName\administrator", $Pass
+    Remove-Item $env:systemRoot/system32/configuration/pending.mof -force
+    Get-Process *wmi* | stop-process -force
+    Restart-Service winrm -force
 
-Start-DscConfiguration -Path C:\windows\system32\dc1config -Wait -Verbose -Credential $Credential
+    $Pass = ConvertTo-SecureString $AdminPassword -AsPlainText -Force
+    $Credential = New-Object System.Management.Automation.PSCredential -ArgumentList "$DomainNetBiosName\administrator", $Pass
+
+    Start-DscConfiguration -Path C:\windows\system32\dc1config -Wait -Verbose -Credential $Credential -ErrorVariable ev
+}
+catch {
+    $_ | Write-AWSQuickStartException
+}
