@@ -16,9 +16,9 @@ global:
     - us-west-2
   reporting: true
 tests:
-  template1:
+  pull:
     parameter_input: Template_1_DSC.json
     template_file: Template_1_DSC.template
-  template2:
+  push:
     parameter_input: Template_2_DSC.json
     template_file: Template_2_DSC.template
