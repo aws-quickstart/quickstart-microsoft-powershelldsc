@@ -56,14 +56,14 @@ try {
 
     Write-Verbose "Exporting Certificates"
 
-    $certificate = Get-ChildItem cert:\localmachine\my -ErrorAction Stop | Where-Object { $_.Subject -eq "CN=$DomainDNSName" }
+    $certificate = Get-ChildItem cert:\localmachine\my | Where-Object { $_.Subject -eq "CN=$DomainDNSName" }
 
-    $mypwd = ConvertTo-SecureString -String $Password -Force –AsPlainText -ErrorAction Stop
-    Export-PfxCertificate $certificate.PSPath -FilePath c:\inetpub\wwwroot\dsc.pfx -Password $mypwd -ErrorAction Stop
-    Export-Certificate -Cert $certificate -FilePath c:\inetpub\wwwroot\dsc.cer -ErrorAction Stop
-    Copy-Item -Path c:\inetpub\wwwroot\dsc.cer -Destination c:\inetpub\wwwroot\dsc.cer.zip -ErrorAction Stop
-    Import-PfxCertificate –FilePath c:\inetpub\wwwroot\dsc.pfx -CertStoreLocation Cert:\LocalMachine\Root -Password $mypwd -ErrorAction Stop
-    Import-PfxCertificate –FilePath c:\inetpub\wwwroot\dsc.pfx -CertStoreLocation Cert:\LocalMachine\My -Password $mypwd -ErrorAction Stop
+    $mypwd = ConvertTo-SecureString -String $Password -Force –AsPlainText
+    Export-PfxCertificate $certificate.PSPath -FilePath c:\inetpub\wwwroot\dsc.pfx -Password $mypwd
+    Export-Certificate -Cert $certificate -FilePath c:\inetpub\wwwroot\dsc.cer
+    Copy-Item -Path c:\inetpub\wwwroot\dsc.cer -Destination c:\inetpub\wwwroot\dsc.cer.zip
+    Import-PfxCertificate –FilePath c:\inetpub\wwwroot\dsc.pfx -CertStoreLocation Cert:\LocalMachine\Root -Password $mypwd
+    Import-PfxCertificate –FilePath c:\inetpub\wwwroot\dsc.pfx -CertStoreLocation Cert:\LocalMachine\My -Password $mypwd
 }
 catch {
     $_ | Write-AWSQuickStartException

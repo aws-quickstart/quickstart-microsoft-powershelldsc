@@ -11,6 +11,8 @@ param(
 )
 
 try {
+    $ErrorActionPreference = "Stop"
+
     Write-Verbose "Downloading http://$PullServer1PrivateIp/dsc.pfx"
     ((new-object net.webclient).DownloadFile(
         "http://$PullServer1PrivateIp/dsc.pfx",
