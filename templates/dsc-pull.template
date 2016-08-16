@@ -1135,7 +1135,7 @@
                     "invokePull": {
                         "commands": {
                             "a-pull-dsc-config": {
-                                "command": "powershell.exe -Command c:\\cfn\\scripts\\Invoke-PerformRequiredConfigurationChecks.ps1",
+                                "command": "powershell.exe -Command c:\\cfn\\scripts\\Invoke-PerformRequiredConfigurationChecks.ps1 -Verbose",
                                 "waitAfterCompletion": "forever"
                             }
                         }
@@ -1413,7 +1413,7 @@
                     "invokePull": {
                         "commands": {
                             "a-pull-dsc-config": {
-                                "command": "powershell.exe -Command c:\\cfn\\scripts\\Invoke-PerformRequiredConfigurationChecks.ps1",
+                                "command": "powershell.exe -Command c:\\cfn\\scripts\\Invoke-PerformRequiredConfigurationChecks.ps1 -Verbose",
                                 "waitAfterCompletion": "forever"
                             }
                         }
@@ -1691,7 +1691,7 @@
                     "invokePull": {
                         "commands": {
                             "a-pull-dsc-config": {
-                                "command": "powershell.exe -Command c:\\cfn\\scripts\\Invoke-PerformRequiredConfigurationChecks.ps1",
+                                "command": "powershell.exe -Command c:\\cfn\\scripts\\Invoke-PerformRequiredConfigurationChecks.ps1 -Verbose",
                                 "waitAfterCompletion": "forever"
                             }
                         }
@@ -1969,7 +1969,7 @@
                     "invokePull": {
                         "commands": {
                             "a-pull-dsc-config": {
-                                "command": "powershell.exe -Command c:\\cfn\\scripts\\Invoke-PerformRequiredConfigurationChecks.ps1",
+                                "command": "powershell.exe -Command c:\\cfn\\scripts\\Invoke-PerformRequiredConfigurationChecks.ps1 -Verbose",
                                 "waitAfterCompletion": "forever"
                             }
                         }
@@ -2247,7 +2247,7 @@
                     "invokePull": {
                         "commands": {
                             "a-pull-dsc-config": {
-                                "command": "powershell.exe -Command c:\\cfn\\scripts\\Invoke-PerformRequiredConfigurationChecks.ps1",
+                                "command": "powershell.exe -Command c:\\cfn\\scripts\\Invoke-PerformRequiredConfigurationChecks.ps1 -Verbose",
                                 "waitAfterCompletion": "forever"
                             }
                         }
@@ -2525,7 +2525,7 @@
                     "invokePull": {
                         "commands": {
                             "a-pull-dsc-config": {
-                                "command": "powershell.exe -Command c:\\cfn\\scripts\\Invoke-PerformRequiredConfigurationChecks.ps1",
+                                "command": "powershell.exe -Command c:\\cfn\\scripts\\Invoke-PerformRequiredConfigurationChecks.ps1 -Verbose",
                                 "waitAfterCompletion": "forever"
                             }
                         }
