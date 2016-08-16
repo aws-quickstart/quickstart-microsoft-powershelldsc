@@ -170,7 +170,7 @@
         "RDGWEIP1": {
             "Type": "AWS::EC2::EIP",
             "Properties": {
-                "Domain": "VPCID",
+                "Domain": "vpc",
                 "InstanceId": {
                     "Ref": "RDGW1"
                 }
@@ -179,7 +179,7 @@
         "RDGWEIP2": {
             "Type": "AWS::EC2::EIP",
             "Properties": {
-                "Domain": "VPCID",
+                "Domain": "vpc",
                 "InstanceId": {
                     "Ref": "RDGW2"
                 }
