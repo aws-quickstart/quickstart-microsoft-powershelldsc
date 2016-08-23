@@ -82,6 +82,20 @@
             "Description": "ID of the public subnet 2 you want to provision the second Remote Desktop Gateway into (e.g., subnet-e3246d8e)",
             "Type": "AWS::EC2::Subnet::Id"
         },
+        "QSS3BucketName": {
+            "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
+            "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Default": "quickstart-reference",
+            "Description": "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Type": "String"
+        },
+        "QSS3KeyPrefix": {
+            "AllowedPattern": "^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$",
+            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
+            "Default": "microsoft/powershelldsc/latest",
+            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
+            "Type": "String"
+        },
         "RDGWCIDR": {
             "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
             "Default": "0.0.0.0/0",
@@ -164,6 +178,56 @@
                 "AWSNAT": "ami-a275b1c2",
                 "WS2012R2": "ami-1712d877"
             }
+        },
+        "AWSInfoRegionMap": {
+            "ap-northeast-1": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
+            "ap-northeast-2": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
+            "ap-south-1": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
+            "ap-southeast-1": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
+            "ap-southeast-2": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
+            "eu-central-1": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
+            "eu-west-1": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
+            "sa-east-1": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
+            "us-east-1": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
+            "us-gov-west-1": {
+                "Partition": "aws-us-gov",
+                "QuickStartS3URL": "https://s3-us-gov-west-1.amazonaws.com"
+            },
+            "us-west-1": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
+            "us-west-2": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            }
         }
     },
     "Resources": {
@@ -242,37 +306,279 @@
                                 }
                             },
                             "c:\\cfn\\scripts\\Unzip-Archive.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\modules\\AWSQuickStart.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/modules/AWSQuickStart.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/modules/AWSQuickStart.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\CreateWaitHandle.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/scripts/CreateWaitHandle.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/CreateWaitHandle.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\DC1.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/configs/DC1.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/configs/DC1.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\DC1-2.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/configs/DC1-2.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/configs/DC1-2.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\Reset-LocalAdminPassword.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/Reset-LocalAdminPassword.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/Reset-LocalAdminPassword.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\IPHelper.psm1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/IPHelper.psm1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/IPHelper.psm1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\New-DSCCertificate.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/New-DSCCertificate.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/New-DSCCertificate.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xNetworking_2.1.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xNetworking_2.1.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xNetworking_2.1.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xComputerManagement_1.2.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xComputerManagement_1.2.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xComputerManagement_1.2.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xActiveDirectory_2.0.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xActiveDirectory_2.0.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xActiveDirectory_2.0.zip"
+                                        ]
+                                    ]
+                                }
                             }
                         },
                         "services": {
@@ -561,34 +867,254 @@
                                 }
                             },
                             "c:\\cfn\\scripts\\Unzip-Archive.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\modules\\AWSQuickStart.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/modules/AWSQuickStart.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/modules/AWSQuickStart.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\CreateWaitHandle.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/scripts/CreateWaitHandle.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/CreateWaitHandle.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\DC2.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/configs/DC2.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/configs/DC2.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\Reset-LocalAdminPassword.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/Reset-LocalAdminPassword.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/Reset-LocalAdminPassword.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\IPHelper.psm1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/IPHelper.psm1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/IPHelper.psm1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\New-DSCCertificate.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/New-DSCCertificate.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/New-DSCCertificate.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xNetworking_2.1.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xNetworking_2.1.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xNetworking_2.1.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xComputerManagement_1.2.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xComputerManagement_1.2.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xComputerManagement_1.2.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xActiveDirectory_2.0.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xActiveDirectory_2.0.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xActiveDirectory_2.0.zip"
+                                        ]
+                                    ]
+                                }
                             }
                         },
                         "services": {
@@ -850,28 +1376,204 @@
                                 }
                             },
                             "c:\\cfn\\scripts\\Unzip-Archive.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\modules\\AWSQuickStart.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/modules/AWSQuickStart.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/modules/AWSQuickStart.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\CreateWaitHandle.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/scripts/CreateWaitHandle.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/CreateWaitHandle.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\RDGW1.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/configs/RDGW1.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/configs/RDGW1.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\Reset-LocalAdminPassword.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/Reset-LocalAdminPassword.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/Reset-LocalAdminPassword.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\New-DSCCertificate.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/New-DSCCertificate.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/New-DSCCertificate.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xNetworking_2.1.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xNetworking_2.1.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xNetworking_2.1.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xComputerManagement_1.2.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xComputerManagement_1.2.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xComputerManagement_1.2.zip"
+                                        ]
+                                    ]
+                                }
                             }
                         },
                         "services": {
@@ -1125,28 +1827,204 @@
                                 }
                             },
                             "c:\\cfn\\scripts\\Unzip-Archive.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\modules\\AWSQuickStart.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/modules/AWSQuickStart.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/modules/AWSQuickStart.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\CreateWaitHandle.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/scripts/CreateWaitHandle.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/CreateWaitHandle.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\RDGW2.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/configs/RDGW2.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/configs/RDGW2.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\Reset-LocalAdminPassword.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/Reset-LocalAdminPassword.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/Reset-LocalAdminPassword.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\New-DSCCertificate.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/New-DSCCertificate.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/New-DSCCertificate.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xNetworking_2.1.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xNetworking_2.1.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xNetworking_2.1.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xComputerManagement_1.2.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xComputerManagement_1.2.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xComputerManagement_1.2.zip"
+                                        ]
+                                    ]
+                                }
                             }
                         },
                         "services": {
@@ -1400,28 +2278,204 @@
                                 }
                             },
                             "c:\\cfn\\scripts\\Unzip-Archive.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\modules\\AWSQuickStart.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/modules/AWSQuickStart.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/modules/AWSQuickStart.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\CreateWaitHandle.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/scripts/CreateWaitHandle.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/CreateWaitHandle.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\WEB1.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/configs/WEB1.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/configs/WEB1.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\Reset-LocalAdminPassword.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/Reset-LocalAdminPassword.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/Reset-LocalAdminPassword.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\New-DSCCertificate.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/New-DSCCertificate.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/New-DSCCertificate.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xNetworking_2.1.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xNetworking_2.1.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xNetworking_2.1.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xComputerManagement_1.2.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xComputerManagement_1.2.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xComputerManagement_1.2.zip"
+                                        ]
+                                    ]
+                                }
                             }
                         },
                         "services": {
@@ -1675,28 +2729,204 @@
                                 }
                             },
                             "c:\\cfn\\scripts\\Unzip-Archive.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/Unzip-Archive.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\modules\\AWSQuickStart.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/modules/AWSQuickStart.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/modules/AWSQuickStart.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\CreateWaitHandle.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/microsoft-utilities/scripts/CreateWaitHandle.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "submodules/quickstart-microsoft-utilities/scripts/CreateWaitHandle.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\WEB2.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/configs/WEB2.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/configs/WEB2.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\Reset-LocalAdminPassword.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/Reset-LocalAdminPassword.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/Reset-LocalAdminPassword.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "c:\\cfn\\scripts\\New-DSCCertificate.ps1": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/New-DSCCertificate.ps1"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/New-DSCCertificate.ps1"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xNetworking_2.1.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xNetworking_2.1.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xNetworking_2.1.zip"
+                                        ]
+                                    ]
+                                }
                             },
                             "C:\\cfn\\Modules\\xComputerManagement_1.2.zip": {
-                                "source": "https://s3.amazonaws.com/quickstart-reference/microsoft/powershelldsc/latest/scripts/modules/xComputerManagement_1.2.zip"
+                                "source": {
+                                    "Fn::Join": [
+                                        "/",
+                                        [
+                                            {
+                                                "Fn::FindInMap": [
+                                                    "AWSInfoRegionMap",
+                                                    {
+                                                        "Ref": "AWS::Region"
+                                                    },
+                                                    "QuickStartS3URL"
+                                                ]
+                                            },
+                                            {
+                                                "Ref": "QSS3BucketName"
+                                            },
+                                            {
+                                                "Ref": "QSS3KeyPrefix"
+                                            },
+                                            "scripts/modules/xComputerManagement_1.2.zip"
+                                        ]
+                                    ]
+                                }
                             }
                         },
                         "services": {
