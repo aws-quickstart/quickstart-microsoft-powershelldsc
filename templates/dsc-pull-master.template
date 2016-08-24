@@ -91,10 +91,10 @@
                     "default": "Public Subnet 2 CIDR"
                 },
                 "PullServer1PrivateIP": {
-                    "default": "Domain Controller 1 Private IP Address"
+                    "default": "Pull Server 1 Private IP Address"
                 },
                 "PullServer2PrivateIP": {
-                    "default": "Domain Controller 2 Private IP Address"
+                    "default": "Pull Server 2 Private IP Address"
                 },
                 "PullServerInstanceType": {
                     "default": "Pull Server Instance Type"
