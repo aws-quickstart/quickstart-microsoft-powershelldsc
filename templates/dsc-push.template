@@ -158,51 +158,42 @@
     "Mappings": {
         "AWSAMIRegionMap": {
             "AMI": {
-                "AWSNAT": "amzn-ami-vpc-nat-hvm-2016.03.3.x86_64-ebs",
                 "WS2012R2": "Windows_Server-2012-R2_RTM-English-64Bit-Base-2016.10.12"
             },
             "ap-northeast-1": {
-                "AWSNAT": "ami-2443b745",
                 "WS2012R2": "ami-7c449e1d"
             },
             "ap-northeast-2": {
-                "AWSNAT": "ami-d14388bf",
                 "WS2012R2": "ami-4fd30721"
             },
             "ap-south-1": {
-                "AWSNAT": "ami-e2b9d38d",
                 "WS2012R2": "ami-f90f7b96"
             },
             "ap-southeast-1": {
-                "AWSNAT": "ami-a79b49c4",
                 "WS2012R2": "ami-2b309748"
             },
             "ap-southeast-2": {
-                "AWSNAT": "ami-53371f30",
                 "WS2012R2": "ami-74043617"
             },
             "eu-central-1": {
-                "AWSNAT": "ami-5825cd37",
                 "WS2012R2": "ami-0c34ca63"
             },
             "eu-west-1": {
-                "AWSNAT": "ami-a8dd45db",
                 "WS2012R2": "ami-55084526"
             },
             "sa-east-1": {
-                "AWSNAT": "ami-9336bcff",
                 "WS2012R2": "ami-42ee732e"
             },
             "us-east-1": {
-                "AWSNAT": "ami-4868ab25",
                 "WS2012R2": "ami-3f0c4628"
             },
+            "us-east-2": {
+                "WS2012R2": "ami-de164cbb"
+            },
             "us-west-1": {
-                "AWSNAT": "ami-004b0f60",
                 "WS2012R2": "ami-123c7472"
             },
             "us-west-2": {
-                "AWSNAT": "ami-a275b1c2",
                 "WS2012R2": "ami-b871aad8"
             }
         },
@@ -240,6 +231,10 @@
                 "QuickStartS3URL": "https://s3.amazonaws.com"
             },
             "us-east-1": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
+            "us-east-2": {
                 "Partition": "aws",
                 "QuickStartS3URL": "https://s3.amazonaws.com"
             },
