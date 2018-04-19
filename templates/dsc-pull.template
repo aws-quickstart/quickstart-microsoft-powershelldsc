@@ -1639,9 +1639,9 @@
                                             }
                                         }
                                     ]
-                                }
-                            },
-                            "authentication": "S3AccessCreds"
+                                },
+                                "authentication": "S3AccessCreds"
+                            }
                         },
                         "services": {
                             "windows": {
@@ -2848,9 +2848,9 @@
                                             }
                                         }
                                     ]
-                                }
-                            },
-                            "authentication": "S3AccessCreds"
+                                },
+                                "authentication": "S3AccessCreds"
+                            }
                         },
                         "services": {
                             "windows": {
