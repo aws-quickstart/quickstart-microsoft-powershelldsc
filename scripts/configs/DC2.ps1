@@ -40,7 +40,7 @@ try {
 
         Node DC2 {
             cIPAddress DC2IPAddress {
-                InterfaceAlias = 'Ethernet'
+                InterfaceAlias = 'Ethernet*'
                 IPAddress = $ADServer2PrivateIp
                 DefaultGateway = (Get-AWSDefaultGateway -IPAddress $ADServer2PrivateIp)
                 SubnetMask = (Get-AWSSubnetMask -SubnetCIDR $PrivateSubnet2CIDR)
@@ -48,7 +48,7 @@ try {
 
             xDnsServerAddress DnsServerAddress {
                 Address        = $ADServer1PrivateIp
-                InterfaceAlias = 'Ethernet'
+                InterfaceAlias = 'Ethernet*'
                 AddressFamily  = 'IPv4'
                 DependsOn = '[cIPAddress]DC2IPAddress'
             }

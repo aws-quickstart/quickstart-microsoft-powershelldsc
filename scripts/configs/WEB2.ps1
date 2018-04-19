@@ -37,7 +37,7 @@ try {
         Node WEB2 {
             xDnsServerAddress DnsServerAddress {
                 Address        = $ADServer2PrivateIp, $ADServer1PrivateIp
-                InterfaceAlias = 'Ethernet'
+                InterfaceAlias = 'Ethernet*'
                 AddressFamily  = 'IPv4'
             }
 

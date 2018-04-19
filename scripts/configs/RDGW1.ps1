@@ -37,7 +37,7 @@ try {
         Node RDGW1 {
             xDnsServerAddress DnsServerAddress {
                 Address        = $ADServer1PrivateIp, $ADServer2PrivateIp
-                InterfaceAlias = 'Ethernet'
+                InterfaceAlias = 'Ethernet*'
                 AddressFamily  = 'IPv4'
             }
 
