@@ -131,6 +131,10 @@
             "Default": "t2.large",
             "Description": "Amazon EC2 instance type for the Windows Instances",
             "Type": "String"
+        },
+        "LatestAmiId": {
+            "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+            "Default": "/aws/service/ami-windows-latest/Windows_Server-2012-R2_RTM-English-64Bit-Base"
         }
     },
     "Conditions": {
@@ -163,49 +167,6 @@
                     "AssertDescription": "All subnets must in the VPC"
                 }
             ]
-        }
-    },
-    "Mappings": {
-        "AWSAMIRegionMap": {
-            "AMI": {
-                "WS2012R2": "Windows_Server-2012-R2_RTM-English-64Bit-Base-2018.12.13"
-            },
-            "ap-northeast-1": {
-                "WS2012R2": "ami-01a36b3a16228aabc"
-            },
-            "ap-northeast-2": {
-                "WS2012R2": "ami-028139f205d2daa74"
-            },
-            "ap-south-1": {
-                "WS2012R2": "ami-0fa27628302568cf8"
-            },
-            "ap-southeast-1": {
-                "WS2012R2": "ami-0634a2a4e5f335566"
-            },
-            "ap-southeast-2": {
-                "WS2012R2": "ami-0af54fcc300d51d81"
-            },
-            "eu-central-1": {
-                "WS2012R2": "ami-0a6b3fad1e65fbba5"
-            },
-            "eu-west-1": {
-                "WS2012R2": "ami-05697bc3b1b84a9a6"
-            },
-            "sa-east-1": {
-                "WS2012R2": "ami-0203e28b0bd45659f"
-            },
-            "us-east-1": {
-                "WS2012R2": "ami-02cb4450ba80eb057"
-            },
-            "us-east-2": {
-                "WS2012R2": "ami-0335db37835305b27"
-            },
-            "us-west-1": {
-                "WS2012R2": "ami-0b6ac87fe08b48203"
-            },
-            "us-west-2": {
-                "WS2012R2": "ami-01d5bff29ab3fb41e"
-            }
         }
     },
     "Resources": {
@@ -711,13 +672,7 @@
                     "Ref": "EC2RoleInstanceProfile"
                 },
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "WindowsInstanceType"
@@ -1156,13 +1111,7 @@
                     "Ref": "EC2RoleInstanceProfile"
                 },
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "WindowsInstanceType"
@@ -1559,13 +1508,7 @@
                     "Ref": "EC2RoleInstanceProfile"
                 },
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "WindowsInstanceType"
@@ -1962,13 +1905,7 @@
                     "Ref": "EC2RoleInstanceProfile"
                 },
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "WindowsInstanceType"
@@ -2365,13 +2302,7 @@
                     "Ref": "EC2RoleInstanceProfile"
                 },
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "WindowsInstanceType"
@@ -2768,13 +2699,7 @@
                     "Ref": "EC2RoleInstanceProfile"
                 },
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "WindowsInstanceType"
