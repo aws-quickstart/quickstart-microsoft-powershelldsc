@@ -153,6 +153,10 @@
             "Default": "t2.large",
             "Description": "Amazon EC2 instance type for the Windows Instances",
             "Type": "String"
+        },
+        "LatestAmiId": {
+            "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+            "Default": "/aws/service/ami-windows-latest/Windows_Server-2012-R2_RTM-English-64Bit-Base"
         }
     },
     "Conditions": {
@@ -185,49 +189,6 @@
                     "AssertDescription": "All subnets must in the VPC"
                 }
             ]
-        }
-    },
-    "Mappings": {
-        "AWSAMIRegionMap": {
-            "AMI": {
-                "WS2012R2": "Windows_Server-2012-R2_RTM-English-64Bit-Base-2018.12.12"
-            },
-            "ap-northeast-1": {
-                "WS2012R2": "ami-0e8e51f50c1d7d1b6"
-            },
-            "ap-northeast-2": {
-                "WS2012R2": "ami-00dc8ef56b733f3dc"
-            },
-            "ap-south-1": {
-                "WS2012R2": "ami-03291442a55ad02c1"
-            },
-            "ap-southeast-1": {
-                "WS2012R2": "ami-059b411d0e166914e"
-            },
-            "ap-southeast-2": {
-                "WS2012R2": "ami-0d5ee30b3c177dc50"
-            },
-            "eu-central-1": {
-                "WS2012R2": "ami-07338b9e99ae289ac"
-            },
-            "eu-west-1": {
-                "WS2012R2": "ami-08d5e9721f152cfc1"
-            },
-            "sa-east-1": {
-                "WS2012R2": "ami-098c1f48dc672ab2b"
-            },
-            "us-east-1": {
-                "WS2012R2": "ami-085ea1972627f58fd"
-            },
-            "us-east-2": {
-                "WS2012R2": "ami-0a562b81f2dd5ffe6"
-            },
-            "us-west-1": {
-                "WS2012R2": "ami-0aee96900bc0502fd"
-            },
-            "us-west-2": {
-                "WS2012R2": "ami-03833dcc7d9010c5a"
-            }
         }
     },
     "Resources": {
@@ -796,13 +757,7 @@
             },
             "Properties": {
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "PullServerInstanceType"
@@ -1375,13 +1330,7 @@
             },
             "Properties": {
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "PullServerInstanceType"
@@ -1765,13 +1714,7 @@
             },
             "Properties": {
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "WindowsInstanceType"
@@ -2168,13 +2111,7 @@
             },
             "Properties": {
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "WindowsInstanceType"
@@ -2571,13 +2508,7 @@
             },
             "Properties": {
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "WindowsInstanceType"
@@ -2974,13 +2905,7 @@
             },
             "Properties": {
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "WindowsInstanceType"
@@ -3377,13 +3302,7 @@
             },
             "Properties": {
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "WindowsInstanceType"
@@ -3780,13 +3699,7 @@
             },
             "Properties": {
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "AWSAMIRegionMap",
-                        {
-                            "Ref": "AWS::Region"
-                        },
-                        "WS2012R2"
-                    ]
+                    "Ref": "LatestAmiId"
                 },
                 "InstanceType": {
                     "Ref": "WindowsInstanceType"
