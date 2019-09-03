@@ -3892,7 +3892,7 @@
                 "Handle": {
                     "Ref": "DC1WaitHandle"
                 },
-                "Timeout": "3000"
+                "Timeout": "4500"
             }
         },
         "DC1WaitHandle": {
@@ -3905,7 +3905,7 @@
                 "Handle": {
                     "Ref": "DC2WaitHandle"
                 },
-                "Timeout": "3000"
+                "Timeout": "4500"
             }
         },
         "DC2WaitHandle": {
