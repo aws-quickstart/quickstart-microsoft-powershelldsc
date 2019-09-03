@@ -29,7 +29,7 @@ tests:
   push-master:
     parameter_input: dsc-push-master.json
     regions:
-#      - ap-northeast-2
+      - ap-northeast-2
       - eu-central-1
       - eu-west-2
       - us-east-2
