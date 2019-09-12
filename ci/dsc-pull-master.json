@@ -69,7 +69,7 @@
     },
     {
         "ParameterKey": "WindowsInstanceType",
-        "ParameterValue": "t2.large"
+        "ParameterValue": "m5.large"
     },
     {
         "ParameterKey": "QSS3BucketName",
