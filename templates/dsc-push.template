@@ -40,7 +40,7 @@ Parameters:
     Description: NetBIOS name of the domain (up to 15 characters) for users of earlier
       versions of Windows e.g. EXAMPLE
     MaxLength: '15'
-    MinLength: '1'
+    MinLength: 1
     Type: String
   KeyPairName:
     Description: Public/private key pairs allow you to securely connect to your instance
@@ -96,6 +96,10 @@ Parameters:
       can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
     Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: "The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value."
+    Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
@@ -140,6 +144,7 @@ Conditions:
   GovCloudCondition: !Equals
     - !Ref 'AWS::Region'
     - us-gov-west-1
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Rules:
   SubnetsInVPC:
     Assertions:
@@ -169,12 +174,7 @@ Resources:
             Statement:
               - Action:
                   - s3:GetObject
-                Resource: !Sub
-                  - arn:${Partition}:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*
-                  - Partition: !If
-                      - GovCloudCondition
-                      - aws-us-gov
-                      - aws
+                Resource: "*"
                 Effect: Allow
           PolicyName: aws-quick-start-s3-policy
   EC2RoleInstanceProfile:
@@ -200,8 +200,7 @@ Resources:
         S3AccessCreds:
           type: S3
           roleName: !Ref 'EC2Role'
-          buckets:
-            - !Ref 'QSS3BucketName'
+          buckets: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       AWS::CloudFormation::Init:
         configSets:
           config:
@@ -422,7 +421,7 @@ Resources:
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
           Ebs:
-            VolumeSize: '100'
+            VolumeSize: 100
             VolumeType: gp2
       SecurityGroupIds:
         - !Ref 'DomainController1SG'
@@ -447,8 +446,7 @@ Resources:
         S3AccessCreds:
           type: S3
           roleName: !Ref 'EC2Role'
-          buckets:
-            - !Ref 'QSS3BucketName'
+          buckets: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       AWS::CloudFormation::Init:
         configSets:
           config:
@@ -648,7 +646,7 @@ Resources:
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
           Ebs:
-            VolumeSize: '100'
+            VolumeSize: 100
             VolumeType: gp2
       SecurityGroupIds:
         - !Ref 'DomainController2SG'
@@ -854,7 +852,7 @@ Resources:
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
           Ebs:
-            VolumeSize: '50'
+            VolumeSize: 50
             VolumeType: gp2
       SecurityGroupIds:
         - !Ref 'RDGWSecurityGroup'
@@ -1060,7 +1058,7 @@ Resources:
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
           Ebs:
-            VolumeSize: '50'
+            VolumeSize: 50
             VolumeType: gp2
       SecurityGroupIds:
         - !Ref 'RDGWSecurityGroup'
@@ -1266,7 +1264,7 @@ Resources:
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
           Ebs:
-            VolumeSize: '50'
+            VolumeSize: 50
             VolumeType: gp2
       SecurityGroupIds:
         - !Ref 'DomainMemberSG'
@@ -1472,7 +1470,7 @@ Resources:
       BlockDeviceMappings:
         - DeviceName: /dev/sda1
           Ebs:
-            VolumeSize: '50'
+            VolumeSize: 50
             VolumeType: gp2
       SecurityGroupIds:
         - !Ref 'DomainMemberSG'
@@ -1543,13 +1541,13 @@ Resources:
       GroupDescription: Enable RDP access from the Internet
       VpcId: !Ref 'VPCID'
       SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: '3389'
-          ToPort: '3389'
+        - IpProtocol: 'tcp'
+          FromPort: 3389
+          ToPort: 3389
           CidrIp: !Ref 'RDGWCIDR'
-        - IpProtocol: icmp
-          FromPort: '-1'
-          ToPort: '-1'
+        - IpProtocol: 'icmp'
+          FromPort: -1
+          ToPort: -1
           CidrIp: !Ref 'RDGWCIDR'
   IISWebGroup:
     Type: AWS::EC2::SecurityGroup
@@ -1557,9 +1555,9 @@ Resources:
       GroupDescription: Enable Access to IIS Web Servers
       VpcId: !Ref 'VPCID'
       SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: '80'
-          ToPort: '80'
+        - IpProtocol: 'tcp'
+          FromPort: 80
+          ToPort: 80
           CidrIp: !Ref 'VPCCIDR'
   DomainController1SG:
     Type: AWS::EC2::SecurityGroup
@@ -1567,100 +1565,100 @@ Resources:
       GroupDescription: Domain Controller 1
       VpcId: !Ref 'VPCID'
       SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: '5985'
-          ToPort: '5985'
+        - IpProtocol: 'tcp'
+          FromPort: 5985
+          ToPort: 5985
           CidrIp: !Ref 'VPCCIDR'
         - IpProtocol: '-1'
-          FromPort: '1'
-          ToPort: '65535'
+          FromPort: 1
+          ToPort: 65535
           CidrIp: !Join
             - ''
             - - !Ref 'ADServer2PrivateIP'
               - /32
-        - IpProtocol: udp
-          FromPort: '123'
-          ToPort: '123'
+        - IpProtocol: 'udp'
+          FromPort: 123
+          ToPort: 123
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '135'
-          ToPort: '135'
+        - IpProtocol: 'tcp'
+          FromPort: 135
+          ToPort: 135
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '9389'
-          ToPort: '9389'
+        - IpProtocol: 'tcp'
+          FromPort: 9389
+          ToPort: 9389
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '138'
-          ToPort: '138'
+        - IpProtocol: 'udp'
+          FromPort: 138
+          ToPort: 138
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '445'
-          ToPort: '445'
+        - IpProtocol: 'tcp'
+          FromPort: 445
+          ToPort: 445
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '445'
-          ToPort: '445'
+        - IpProtocol: 'udp'
+          FromPort: 445
+          ToPort: 445
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '464'
-          ToPort: '464'
+        - IpProtocol: 'udp'
+          FromPort: 464
+          ToPort: 464
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '464'
-          ToPort: '464'
+        - IpProtocol: 'tcp'
+          FromPort: 464
+          ToPort: 464
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '49152'
-          ToPort: '65535'
+        - IpProtocol: 'tcp'
+          FromPort: 49152
+          ToPort: 65535
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '49152'
-          ToPort: '65535'
+        - IpProtocol: 'udp'
+          FromPort: 49152
+          ToPort: 65535
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '389'
-          ToPort: '389'
+        - IpProtocol: 'tcp'
+          FromPort: 389
+          ToPort: 389
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '389'
-          ToPort: '389'
+        - IpProtocol: 'udp'
+          FromPort: 389
+          ToPort: 389
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '636'
-          ToPort: '636'
+        - IpProtocol: 'tcp'
+          FromPort: 636
+          ToPort: 636
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '3268'
-          ToPort: '3268'
+        - IpProtocol: 'tcp'
+          FromPort: 3268
+          ToPort: 3268
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '3269'
-          ToPort: '3269'
+        - IpProtocol: 'tcp'
+          FromPort: 3269
+          ToPort: 3269
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '53'
-          ToPort: '53'
+        - IpProtocol: 'tcp'
+          FromPort: 53
+          ToPort: 53
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '53'
-          ToPort: '53'
+        - IpProtocol: 'udp'
+          FromPort: 53
+          ToPort: 53
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '88'
-          ToPort: '88'
+        - IpProtocol: 'tcp'
+          FromPort: 88
+          ToPort: 88
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '88'
-          ToPort: '88'
+        - IpProtocol: 'udp'
+          FromPort: 88
+          ToPort: 88
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '3389'
-          ToPort: '3389'
+        - IpProtocol: 'tcp'
+          FromPort: 3389
+          ToPort: 3389
           CidrIp: !Ref 'VPCCIDR'
-        - IpProtocol: icmp
-          FromPort: '-1'
-          ToPort: '-1'
+        - IpProtocol: 'icmp'
+          FromPort: -1
+          ToPort: -1
           CidrIp: !Ref 'PublicSubnet1CIDR'
   DomainController2SG:
     Type: AWS::EC2::SecurityGroup
@@ -1668,100 +1666,100 @@ Resources:
       GroupDescription: Domain Controller 2
       VpcId: !Ref 'VPCID'
       SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: '5985'
-          ToPort: '5985'
+        - IpProtocol: 'tcp'
+          FromPort: 5985
+          ToPort: 5985
           CidrIp: !Ref 'VPCCIDR'
         - IpProtocol: '-1'
-          FromPort: '1'
-          ToPort: '65535'
+          FromPort: 1
+          ToPort: 65535
           CidrIp: !Join
             - ''
             - - !Ref 'ADServer1PrivateIP'
               - /32
-        - IpProtocol: udp
-          FromPort: '123'
-          ToPort: '123'
+        - IpProtocol: 'udp'
+          FromPort: 123
+          ToPort: 123
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '135'
-          ToPort: '135'
+        - IpProtocol: 'tcp'
+          FromPort: 135
+          ToPort: 135
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '9389'
-          ToPort: '9389'
+        - IpProtocol: 'tcp'
+          FromPort: 9389
+          ToPort: 9389
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '138'
-          ToPort: '138'
+        - IpProtocol: 'udp'
+          FromPort: 138
+          ToPort: 138
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '445'
-          ToPort: '445'
+        - IpProtocol: 'tcp'
+          FromPort: 445
+          ToPort: 445
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '445'
-          ToPort: '445'
+        - IpProtocol: 'udp'
+          FromPort: 445
+          ToPort: 445
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '464'
-          ToPort: '464'
+        - IpProtocol: 'udp'
+          FromPort: 464
+          ToPort: 464
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '464'
-          ToPort: '464'
+        - IpProtocol: 'tcp'
+          FromPort: 464
+          ToPort: 464
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '49152'
-          ToPort: '65535'
+        - IpProtocol: 'tcp'
+          FromPort: 49152
+          ToPort: 65535
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '49152'
-          ToPort: '65535'
+        - IpProtocol: 'udp'
+          FromPort: 49152
+          ToPort: 65535
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '389'
-          ToPort: '389'
+        - IpProtocol: 'tcp'
+          FromPort: 389
+          ToPort: 389
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '389'
-          ToPort: '389'
+        - IpProtocol: 'udp'
+          FromPort: 389
+          ToPort: 389
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '636'
-          ToPort: '636'
+        - IpProtocol: 'tcp'
+          FromPort: 636
+          ToPort: 636
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '3268'
-          ToPort: '3268'
+        - IpProtocol: 'tcp'
+          FromPort: 3268
+          ToPort: 3268
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '3269'
-          ToPort: '3269'
+        - IpProtocol: 'tcp'
+          FromPort: 3269
+          ToPort: 3269
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '53'
-          ToPort: '53'
+        - IpProtocol: 'tcp'
+          FromPort: 53
+          ToPort: 53
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '53'
-          ToPort: '53'
+        - IpProtocol: 'udp'
+          FromPort: 53
+          ToPort: 53
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '88'
-          ToPort: '88'
+        - IpProtocol: 'tcp'
+          FromPort: 88
+          ToPort: 88
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: udp
-          FromPort: '88'
-          ToPort: '88'
+        - IpProtocol: 'udp'
+          FromPort: 88
+          ToPort: 88
           SourceSecurityGroupId: !Ref 'DomainMemberSG'
-        - IpProtocol: tcp
-          FromPort: '3389'
-          ToPort: '3389'
+        - IpProtocol: 'tcp'
+          FromPort: 3389
+          ToPort: 3389
           CidrIp: !Ref 'VPCCIDR'
-        - IpProtocol: icmp
-          FromPort: '-1'
-          ToPort: '-1'
+        - IpProtocol: 'icmp'
+          FromPort: -1
+          ToPort: -1
           CidrIp: !Ref 'PublicSubnet1CIDR'
   DomainMemberSG:
     Type: AWS::EC2::SecurityGroup
@@ -1769,33 +1767,33 @@ Resources:
       GroupDescription: Domain Members
       VpcId: !Ref 'VPCID'
       SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: '53'
-          ToPort: '53'
+        - IpProtocol: 'tcp'
+          FromPort: 53
+          ToPort: 53
           CidrIp: !Ref 'PrivateSubnet1CIDR'
-        - IpProtocol: tcp
-          FromPort: '3389'
-          ToPort: '3389'
+        - IpProtocol: 'tcp'
+          FromPort: 3389
+          ToPort: 3389
           CidrIp: !Ref 'VPCCIDR'
-        - IpProtocol: tcp
-          FromPort: '445'
-          ToPort: '445'
+        - IpProtocol: 'tcp'
+          FromPort: 445
+          ToPort: 445
           CidrIp: !Ref 'PrivateSubnet1CIDR'
-        - IpProtocol: tcp
-          FromPort: '139'
-          ToPort: '139'
+        - IpProtocol: 'tcp'
+          FromPort: 139
+          ToPort: 139
           CidrIp: !Ref 'PrivateSubnet1CIDR'
-        - IpProtocol: udp
-          FromPort: '53'
-          ToPort: '53'
+        - IpProtocol: 'udp'
+          FromPort: 53
+          ToPort: 53
           CidrIp: !Ref 'PrivateSubnet1CIDR'
-        - IpProtocol: tcp
-          FromPort: '49152'
-          ToPort: '65535'
+        - IpProtocol: 'tcp'
+          FromPort: 49152
+          ToPort: 65535
           CidrIp: !Ref 'PrivateSubnet1CIDR'
-        - IpProtocol: udp
-          FromPort: '49152'
-          ToPort: '65535'
+        - IpProtocol: 'udp'
+          FromPort: 49152
+          ToPort: 65535
           CidrIp: !Ref 'PrivateSubnet1CIDR'
 Outputs:
   RDGW1ElasticIP:
