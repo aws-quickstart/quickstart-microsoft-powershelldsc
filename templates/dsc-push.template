@@ -158,6 +158,17 @@ Resources:
   EC2Role:
     Type: AWS::IAM::Role
     Properties:
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - s3:GetObject
+                  - s3:ListBucket
+                Resource: "*"
+                Effect: Allow
+          PolicyName: aws-quick-start-s3-policy
+      Path: /
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -167,22 +178,12 @@ Resources:
                 - ec2.amazonaws.com
             Action:
               - sts:AssumeRole
-      Path: /
-      Policies:
-        - PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Action:
-                  - s3:GetObject
-                Resource: "*"
-                Effect: Allow
-          PolicyName: aws-quick-start-s3-policy
   EC2RoleInstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
-      Path: /
       Roles:
         - !Ref 'EC2Role'
+      Path: /
   RDGWEIP1:
     Type: AWS::EC2::EIP
     Properties:

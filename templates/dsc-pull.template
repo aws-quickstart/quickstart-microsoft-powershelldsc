@@ -179,22 +179,13 @@ Resources:
   EC2Role:
     Type: AWS::IAM::Role
     Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - ec2.amazonaws.com
-            Action:
-              - sts:AssumeRole
-      Path: /
       Policies:
         - PolicyDocument:
             Version: '2012-10-17'
             Statement:
               - Action:
                   - s3:GetObject
+                  - s3:ListBucket
                 Resource: "*"
                 Effect: Allow
           PolicyName: aws-quick-start-s3-policy
@@ -209,12 +200,22 @@ Resources:
                 Resource:
                   - '*'
           PolicyName: EC2RolePolicy
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
   EC2RoleInstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
-      Path: /
       Roles:
         - !Ref 'EC2Role'
+      Path: /
   RDGWEIP1:
     Type: AWS::EC2::EIP
     Properties:
@@ -1226,6 +1227,7 @@ Resources:
                   - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
                     S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               authentication: S3AccessCreds
+            c:\cfn\scripts\SetPullMode.ps1:
               source: 
                 - !Sub
                   - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/SetPullMode.ps1
