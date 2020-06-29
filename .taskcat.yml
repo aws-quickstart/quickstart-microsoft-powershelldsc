@@ -1,0 +1,74 @@
+project:
+  name: quickstart-microsoft-powershelldsc
+  owner: quickstart-eng@amazon.com
+  package_lambda: false
+  regions:
+  - ap-northeast-1
+  - ap-northeast-2
+  - ap-south-1
+  - ap-southeast-1
+  - ap-southeast-2
+  - eu-central-1
+  - eu-west-1
+  - us-east-1
+  - us-east-2
+  - us-west-1
+  - us-west-2
+  s3_bucket: ''
+tests:
+  pull-master:
+    parameters:
+      ADServer1PrivateIP: 10.0.0.10
+      ADServer2PrivateIP: 10.0.32.10
+      AdminPassword: $[taskcat_genpass_32]
+      AvailabilityZones: $[taskcat_getaz_2]
+      DomainDNSName: example.com
+      DomainNetBIOSName: EXAMPLE
+      KeyPairName: $[taskcat_getkeypair]
+      NATInstanceType: t2.small
+      PrivateSubnet1CIDR: 10.0.0.0/19
+      PrivateSubnet2CIDR: 10.0.32.0/19
+      PublicSubnet1CIDR: 10.0.128.0/20
+      PublicSubnet2CIDR: 10.0.144.0/20
+      PullServer1PrivateIP: 10.0.0.15
+      PullServer2PrivateIP: 10.0.32.15
+      PullServerInstanceType: t2.medium
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
+      RDGWCIDR: 10.0.0.0/16
+      VPCCIDR: 10.0.0.0/16
+      WindowsInstanceType: m5.large
+    regions:
+#    - eu-central-1
+    - eu-west-1
+    - us-east-1
+#    - us-west-1
+    s3_bucket: ''
+    template: templates/dsc-pull-master.template
+  push-master:
+    parameters:
+      ADServer1PrivateIP: 10.0.0.10
+      ADServer2PrivateIP: 10.0.32.10
+      AdminPassword: $[taskcat_genpass_32]
+      AvailabilityZones: $[taskcat_getaz_2]
+      DomainDNSName: example.com
+      DomainNetBIOSName: EXAMPLE
+      KeyPairName: $[taskcat_getkeypair]
+      NATInstanceType: t2.small
+      PrivateSubnet1CIDR: 10.0.0.0/19
+      PrivateSubnet2CIDR: 10.0.32.0/19
+      PublicSubnet1CIDR: 10.0.128.0/20
+      PublicSubnet2CIDR: 10.0.144.0/20
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
+      RDGWCIDR: 10.0.0.0/16
+      VPCCIDR: 10.0.0.0/16
+      WindowsInstanceType: m5.large
+    regions:
+#    - ap-northeast-2
+    - eu-central-1
+#    - eu-west-2
+    - us-east-2
+    - us-west-2
+    s3_bucket: ''
+    template: templates/dsc-push-master.template
