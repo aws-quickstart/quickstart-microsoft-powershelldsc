@@ -5,7 +5,7 @@ Description: >-
   both by CloudFormation and within Windows by pulling desired configurations from
   the DSC Pull Server. **WARNING** This template creates Amazon EC2 Windows instance
   and related resources. You will be billed for the AWS resources used if you create
-  a stack from this template. QS(000B)
+  a stack from this template. (qs-1qup6ran8)
 Parameters:
   AdminPassword:
     AllowedPattern: (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*

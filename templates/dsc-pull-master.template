@@ -5,7 +5,7 @@ Description: >-
   both by CloudFormation and within Windows by pulling desired configurations from
   the DSC Pull Server. **WARNING** This template creates Amazon EC2 Windows instance
   and related resources. You will be billed for the AWS resources used if you create
-  a stack from this template.
+  a stack from this template. (qs-1qup6ran9)
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
