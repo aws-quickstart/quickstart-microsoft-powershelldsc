@@ -69,6 +69,6 @@ tests:
     - eu-central-1
 #    - eu-west-2
     - us-east-2
-    - us-west-2
+#    - us-west-2
     s3_bucket: ''
     template: templates/dsc-push-master.template

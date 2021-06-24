@@ -239,9 +239,6 @@ Parameters:
     Description: Amazon EC2 instance type for the Windows Instances
     Type: String
 Conditions:
-  GovCloudCondition: !Equals
-    - !Ref 'AWS::Region'
-    - us-gov-west-1
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Resources:
   VPCStack:
@@ -250,14 +247,8 @@ Resources:
       TemplateURL:
         Fn::Sub:
           - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template.yaml'
-          - S3Region: !If
-              - UsingDefaultBucket
-              - !Ref AWS::Region
-              - !Ref QSS3BucketRegion
-            S3Bucket: !If
-              - UsingDefaultBucket
-              - !Sub '${QSS3BucketName}-${AWS::Region}'
-              - !Ref QSS3BucketName
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         AvailabilityZones: !Join
           - ','
@@ -269,19 +260,12 @@ Resources:
         PublicSubnet2CIDR: !Ref 'PublicSubnet2CIDR'
         VPCCIDR: !Ref 'VPCCIDR'
   PSDSCStack:
-    DependsOn: VPCStack
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub
         - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/dsc-pull.template
-        - S3Region: !If
-            - UsingDefaultBucket
-            - !Ref AWS::Region
-            - !Ref QSS3BucketRegion
-          S3Bucket: !If
-            - UsingDefaultBucket
-            - !Sub '${QSS3BucketName}-${AWS::Region}'
-            - !Ref QSS3BucketName
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         AdminPassword: !Ref 'AdminPassword'
         ADServer1PrivateIP: !Ref 'ADServer1PrivateIP'

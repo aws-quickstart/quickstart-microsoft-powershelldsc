@@ -175,6 +175,11 @@ Rules:
 Resources:
   EC2Role:
     Type: AWS::IAM::Role
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyWildcardResource #Wildcard is required for EC2 and to avoid circular dependency
     Properties:
       Policies:
         - PolicyDocument:
@@ -183,7 +188,9 @@ Resources:
               - Action:
                   - s3:GetObject
                   - s3:ListBucket
-                Resource: "*"
+                Resource:
+                  - !Sub ['arn:${AWS::Partition}:s3:::${S3Bucket}/${QSS3KeyPrefix}*', S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]]
+                  - !Sub ['arn:${AWS::Partition}:s3:::${S3Bucket}', S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]]
                 Effect: Allow
           PolicyName: aws-quick-start-s3-policy
         - PolicyDocument:
@@ -1945,8 +1952,6 @@ Resources:
             - "</script>\n"
   DSCLoadBalancer:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
-    DependsOn:
-      - Pull1
     Properties:
       Subnets:
         - !Ref 'PrivateSubnet1ID'
@@ -2066,7 +2071,6 @@ Resources:
           CidrIp: !Ref 'VPCCIDR'
   PullServerGroup:
     Type: AWS::EC2::SecurityGroup
-    DependsOn: ELBGroup
     Properties:
       GroupDescription: Enable Access to DSC Pull Servers
       VpcId: !Ref 'VPCID'
