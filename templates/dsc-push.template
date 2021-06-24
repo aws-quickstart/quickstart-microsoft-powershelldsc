@@ -1480,6 +1480,13 @@ Resources:
     Type: AWS::CloudFormation::WaitConditionHandle
   RDGWSecurityGroup:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: Enable RDP access from the Internet
       VpcId: !Ref 'VPCID'
@@ -1494,6 +1501,13 @@ Resources:
           CidrIp: !Ref 'RDGWCIDR'
   IISWebGroup:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: Enable Access to IIS Web Servers
       VpcId: !Ref 'VPCID'
@@ -1504,6 +1518,13 @@ Resources:
           CidrIp: !Ref 'VPCCIDR'
   DomainController1SG:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: Domain Controller 1
       VpcId: !Ref 'VPCID'
@@ -1605,6 +1626,13 @@ Resources:
           CidrIp: !Ref 'PublicSubnet1CIDR'
   DomainController2SG:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: Domain Controller 2
       VpcId: !Ref 'VPCID'
@@ -1706,6 +1734,13 @@ Resources:
           CidrIp: !Ref 'PublicSubnet1CIDR'
   DomainMemberSG:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: Domain Members
       VpcId: !Ref 'VPCID'

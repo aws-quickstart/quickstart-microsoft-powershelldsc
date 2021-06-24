@@ -180,6 +180,10 @@ Resources:
         config:
           ignore_checks:
             - EIAMPolicyWildcardResource #Wildcard is required for EC2 and to avoid circular dependency
+      cfn_nag:
+        rules_to_suppress:
+          - id: W11
+            reason: "Wildcard is required for EC2 and to avoid circular dependency"
     Properties:
       Policies:
         - PolicyDocument:
@@ -2037,6 +2041,13 @@ Resources:
     Type: AWS::CloudFormation::WaitConditionHandle
   RDGWSecurityGroup:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: Enable RDP access from the Internet
       VpcId: !Ref 'VPCID'
@@ -2051,6 +2062,13 @@ Resources:
           CidrIp: !Ref 'RDGWCIDR'
   ELBGroup:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: Enable access to HTTP via ELB
       VpcId: !Ref 'VPCID'
@@ -2061,6 +2079,13 @@ Resources:
           CidrIp: !Ref 'VPCCIDR'
   IISWebGroup:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: Enable Access to IIS Web Servers
       VpcId: !Ref 'VPCID'
@@ -2071,6 +2096,13 @@ Resources:
           CidrIp: !Ref 'VPCCIDR'
   PullServerGroup:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: Enable Access to DSC Pull Servers
       VpcId: !Ref 'VPCID'
@@ -2123,11 +2155,25 @@ Resources:
           CidrIp: !Ref 'VPCCIDR'
   TargetNode:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: DSC Target Nodes Source Group
       VpcId: !Ref 'VPCID'
   DomainController1SG:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: Domain Controller 1
       VpcId: !Ref 'VPCID'
@@ -2229,6 +2275,13 @@ Resources:
           CidrIp: !Ref 'PublicSubnet1CIDR'
   DomainController2SG:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: Domain Controller 2
       VpcId: !Ref 'VPCID'
@@ -2330,6 +2383,13 @@ Resources:
           CidrIp: !Ref 'PublicSubnet1CIDR'
   DomainMemberSG:
     Type: AWS::EC2::SecurityGroup
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: F1000
+            reason: "Standard Amazon practice"
+          - id: W36
+            reason: "Group description is sufficient"
     Properties:
       GroupDescription: Domain Members
       VpcId: !Ref 'VPCID'
