@@ -6,6 +6,15 @@ Description: >-
   the DSC Pull Server. **WARNING** This template creates Amazon EC2 Windows instance
   and related resources. You will be billed for the AWS resources used if you create
   a stack from this template. (qs-1qup6ran8)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W4002
+        - W9002
+        - W9003
+        - W9004
+        - W9006
 Parameters:
   AdminPassword:
     AllowedPattern: (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*
@@ -281,10 +290,10 @@ Resources:
                   - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
                     S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               authentication: S3AccessCreds
-            c:\cfn\scripts\MasterConfig.ps1:
+            c:\cfn\scripts\MainConfig.ps1:
               source: 
                 !Sub
-                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/MasterConfig.ps1'
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/MainConfig.ps1'
                   - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
                     S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               authentication: S3AccessCreds
@@ -433,7 +442,7 @@ Resources:
             a-build-checksum-mof:
               command: !Join
                 - ''
-                - - 'powershell.exe -Command c:\cfn\scripts\MasterConfig.ps1 -DomainDNSName '
+                - - 'powershell.exe -Command c:\cfn\scripts\MainConfig.ps1 -DomainDNSName '
                   - !Ref 'DomainDNSName'
                   - ' -DomainNetBIOSName '
                   - !Ref 'DomainNetBIOSName'
@@ -537,10 +546,10 @@ Resources:
                   - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
                     S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               authentication: S3AccessCreds
-            c:\cfn\scripts\MasterConfig.ps1:
+            c:\cfn\scripts\MainConfig.ps1:
               source: 
                 !Sub
-                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/MasterConfig.ps1'
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/MainConfig.ps1'
                   - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
                     S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               authentication: S3AccessCreds
@@ -706,7 +715,7 @@ Resources:
             a-build-checksum-mof:
               command: !Join
                 - ''
-                - - 'powershell.exe -Command c:\cfn\scripts\MasterConfig.ps1 -DomainDNSName '
+                - - 'powershell.exe -Command c:\cfn\scripts\MainConfig.ps1 -DomainDNSName '
                   - !Ref 'DomainDNSName'
                   - ' -DomainNetBIOSName '
                   - !Ref 'DomainNetBIOSName'

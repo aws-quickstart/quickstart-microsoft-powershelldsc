@@ -5,6 +5,15 @@ Description: >-
   Windows using PowerShell DSC. **WARNING** This template creates Amazon EC2 Windows
   instance and related resources. You will be billed for the AWS resources used if
   you create a stack from this template. (qs-1qup6ran6)
+Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W4002
+        - W9002
+        - W9003
+        - W9004
+        - W9006
 Parameters:
   AdminPassword:
     AllowedPattern: (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*
